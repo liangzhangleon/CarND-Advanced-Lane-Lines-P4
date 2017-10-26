@@ -37,7 +37,7 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 I read in the test image "./camera_cal/calibration2.jpg" and used the cal_undistort( , , ) function. Then I obtained the following result:
 
-![Undistorted image][./output_images/example_undistort.jpg]
+![Undistorted image](./output_images/example_undistort.jpg)
 
 #### 2. Use color transforms and gradients to create a thresholded binary image. 
 
@@ -45,7 +45,7 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 Here's an example of my output for this step.  
 
-![Binary image][./output_images/example_binary.png]
+![Binary image](./output_images/example_binary.png)
 
 #### 3. Perspective transform 
 The code for my perspective transform includes a function called `warper()`, which appears in the fourth code cell in "./extract_lane_lines.ipynb". The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose to  hardcode the source and destination points.
@@ -61,13 +61,13 @@ This resulted in the following source and destination points:
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![Warped image][./output_images/example_birdview.png]
+![Warped image](./output_images/example_birdview.png)
 
 #### 4. Identify lane-line pixels and fit their positions with a polynomials.
 
-I identified the lane-line pixels by using the basic implemention of the sliding search windows. Then I fit the lane positions with a second order polynomials. Here is an example of my result:
+I identified the lane-line pixels by using the basic implemention of the sliding search windows. Then I fit the lane positions with second order polynomials. Here is an example of my result:
 
-![Fit lines][./output_images/example_fit_lines.jpg]
+![Fit lines](./output_images/example_fit_lines.jpg)
 
 #### 5. Calculate the radius of curvature of the lane and the position of the vehicle with respect to center.
 
@@ -77,7 +77,7 @@ I did this in the 9th code cell of my IPython notebook.
 
 I implemented this step in the 10th code cell in my IPython notebook.  Here is an example of my result on a test image:
 
-![Output image][./output_images/example_output.jpg]
+![Output image](./output_images/example_output.jpg)
 
 ### Pipeline (video)
 
