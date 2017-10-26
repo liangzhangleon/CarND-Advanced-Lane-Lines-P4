@@ -13,16 +13,6 @@ The goals / steps of this project are the following:
 * Warp the detected lane boundaries back onto the original image.
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
-[//]: # (Image References)
-
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
-
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
 Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -39,15 +29,15 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image "./camera_cal/calibration2.jpg" using the `cv2.undistort()` function and obtained this result: 
 
-![Image undistortion][./output_images/undistort2.png]
+![Image undistortion][./output_images/example_undistort.png]
 
 ### Pipeline (single images)
 
 #### 1. An example of a distortion-corrected image.
 
-I read in the test image "" and used the cal_undistort( , , ) function. Then I obtained the following result:
+I read in the test image "./camera_cal/calibration2.jpg" and used the cal_undistort( , , ) function. Then I obtained the following result:
 
-![Undistorted image][image2]
+![Undistorted image][./output_images/example_undistort.jpg]
 
 #### 2. Use color transforms and gradients to create a thresholded binary image. 
 
@@ -55,63 +45,54 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 Here's an example of my output for this step.  
 
-![alt text][image3]
+![Binary image][./output_images/example_binary.png]
 
 #### 3. Perspective transform 
-The code for my perspective transform includes a function called `warper()`, which appears in the fourth code cell in "./extract_lane_lines.ipynb". The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
-
-```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
-```
+The code for my perspective transform includes a function called `warper()`, which appears in the fourth code cell in "./extract_lane_lines.ipynb". The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose to  hardcode the source and destination points.
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 595, 450      | 369, 0        | 
+| 685, 450      | 929, 0      |
+| 269, 674     | 369, 720      |
+| 1029, 674      | 929, 720        |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
+![Warped image][./output_images/example_birdview.png]
 
 #### 4. Identify lane-line pixels and fit their positions with a polynomials.
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+I identified the lane-line pixels by using the basic implemention of the sliding search windows. Then I fit the lane positions with a second order polynomials. Here is an example of my result:
 
-![alt text][image5]
+![Fit lines][./output_images/example_fit_lines.jpg]
 
 #### 5. Calculate the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I did this in the 9th code cell of my IPython notebook.
 
 #### 6. An example image of the results plotted back down onto the road.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in the 10th code cell in my IPython notebook.  Here is an example of my result on a test image:
 
-![alt text][image6]
+![Output image][./output_images/example_output.jpg]
 
 ### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+I rearranged the code I mentioned above and put them together in a function process_image() located in the 12th code cell in my IPython notebook. I applied this function to the project_video.mp4.
 
-Here's a [link to my video result](./project_video.mp4)
-
----
+My final result is "./output_videos/project_video.mp4".
 
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Problems I met
+* The polynomial fitting did not work well.
+* The code identified the boundary of the road as lane lines.
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I modified the thresholds for generating binary image, and I also tuned source and destination points. The results are improved.
+
+#### 2. Outlook
+* Improve the robustness of the code. The code is not so good at handling shadows. A different combination of color transform and gradients could improve the results.
+* Improve the efficiency of the code. For example, many computations for mapping matrix can be avoid. 
