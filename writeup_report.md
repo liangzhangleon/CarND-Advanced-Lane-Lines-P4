@@ -1,4 +1,3 @@
-
 # Advanced Lane Finding Project
 **Liang Zhang**
 
@@ -65,7 +64,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Identify lane-line pixels and fit their positions with a polynomials.
 
-I identified the lane-line pixels by using the basic implemention of the sliding search windows. Then I fit the lane positions with second order polynomials. Here is an example of my result:
+I identified the lane-line pixels by using the basic implemention of the sliding search windows. Then I fit the lane positions with second order polynomials. After the first frame, I used the lane positions from previous frame to search the lane lines. Here is an example of my result:
 
 ![Fit lines](./output_images/example_fit_lines.jpg)
 
@@ -88,11 +87,10 @@ My final result is "./output_videos/project_video.mp4".
 ### Discussion
 
 #### 1. Problems I met
-* The polynomial fitting did not work well.
-* The code identified the boundary of the road as lane lines.
-
-I modified the thresholds for generating binary image, and I also tuned source and destination points. The results are improved.
+* The polynomial fitting did not work well.  => I modified the thresholds for generating binary image
+* The code identified the boundary of the road as lane lines. => I tuned source and destination points. 
+* The results are quite inaccurate when tree shadows appear. => I used lane positions from previous frame and tuned down the upper threshold for s channel in HLS color space.
 
 #### 2. Outlook
 * Improve the robustness of the code. The code is not so good at handling shadows. A different combination of color transform and gradients could improve the results.
-* Improve the efficiency of the code. For example, many computations for mapping matrix can be avoid. 
+* smoothing the detected lanes
